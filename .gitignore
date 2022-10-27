@@ -9,3 +9,9 @@ venv/
 env/
 **/*.duckdb
 **/*.duckdb.wal
+
+external/orders.csv
+external/orders_delim.csv
+external/orders.parquet
+external/python.parquet
+external/python.csv
