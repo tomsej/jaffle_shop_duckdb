@@ -10,3 +10,4 @@ dbt-core>=1.3.0
 
 # extra features
 sqlfluff~=1.2.1
+dbt-osmosis
