@@ -6,3 +6,12 @@ jaffle_shop:
       type: duckdb
       path: 'jaffle_shop.duckdb'
       threads: 24
+      extensions:
+        - httpfs
+        - parquet
+      external_root: external
+      #settings:
+        # s3_region: eu-west-1
+        # s3_access_key_id: ""
+        # s3_secret_access_key: ""
+        # s3_session_token: ""
