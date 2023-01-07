@@ -9,6 +9,12 @@ venv/
 env/
 **/*.duckdb
 **/*.duckdb.wal
+.mypy_cache
+log/
+result.json
+.env
+cdk.out
+.ruff_cache
 
 external/orders.csv
 external/orders_delim.csv

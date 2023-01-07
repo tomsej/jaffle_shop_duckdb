@@ -8,15 +8,30 @@ FROM mcr.microsoft.com/vscode/devcontainers/python:0-${VARIANT}
 ARG NODE_VERSION="none"
 RUN if [ "${NODE_VERSION}" != "none" ]; then su vscode -c "umask 0002 && . /usr/local/share/nvm/nvm.sh && nvm install ${NODE_VERSION} 2>&1"; fi
 
-# [Optional] If your pip requirements rarely change, uncomment this section to add them to the image.
 COPY requirements.txt /tmp/pip-tmp/
+# Install
 RUN pip3 --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/requirements.txt \
-   && rm -rf /tmp/pip-tmp
+   && rm -rf /tmp/pip-tmp \
+   # Get Arch
+   && arch_base=$(arch) \
+   && arch=$(arch | sed s/aarch64/arm64/ | sed s/x86_64/amd64/) \
+   # Install AWS CDK
+   && npm install -g aws-cdk \
+   && cd /tmp \
+   # Install AWS cli
+   && curl "https://awscli.amazonaws.com/awscli-exe-linux-${arch_base}.zip" -o "awscliv2.zip" \
+   && unzip awscliv2.zip \
+   && aws/install \
+    # Install vegas credentials
+   && curl -L "https://github.com/aripalo/vegas-credentials/releases/download/v0.14.4/vegas-credentials_0.14.4_linux_${arch}.tar.gz" -o "vegascreds.tar.gz" \
+   && tar -xf vegascreds.tar.gz \
+   && mv vegas-credentials /usr/bin/ \
+   && chmod +x /usr/bin/vegas-credentials \
+   # Persist bash history
+   && SNIPPET="export PROMPT_COMMAND='history -a' && export HISTFILE=/commandhistory/.bash_history" \
+   && echo $SNIPPET >> "/root/.bashrc" \
+   # Add dbt completion to bash
+   && curl https://raw.githubusercontent.com/fishtown-analytics/dbt-completion.bash/master/dbt-completion.bash > ~/.dbt-completion.bash \
+   && echo 'source ~/.dbt-completion.bash' >> ~/.bash_profile
 
-# [Optional] Uncomment this section to install additional OS packages.
-# RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-#     && apt-get -y install --no-install-recommends <your-package-list-here>
-
-# [Optional] Uncomment this line to install global node packages.
-# RUN su vscode -c "source /usr/local/share/nvm/nvm.sh && npm install -g <your-package-here>" 2>&1
 USER root

@@ -11,11 +11,13 @@ test-paths: ["tests"]
 analysis-paths: ["analysis"]
 macro-paths: ["macros"]
 
-target-path: "target"
+target-path: "{{ env_var('DBT_ROOT', '.') }}/target"
+log-path: "{{ env_var('DBT_ROOT', '.') }}/logs"
+packages-install-path: "{{ env_var('DBT_ROOT', '.') }}/dbt_packages"
 clean-targets:
-    - "target"
-    - "dbt_modules"
-    - "logs"
+    - "{{ env_var('DBT_ROOT', '.') }}/target"
+    - "{{ env_var('DBT_ROOT', '.') }}/dbt_packages"
+    - "{{ env_var('DBT_ROOT', '.') }}/logs"
 
 require-dbt-version: [">=1.0.0", "<2.0.0"]
 

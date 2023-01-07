@@ -1,10 +1,7 @@
 {{
     config(
-        materialized='external',
-        location='external/orders_delim.csv',
-        format='csv',
-        delimiter='|'
+        materialized="external",
+        format="csv",
+        delimiter="|",
     )
-}}
-
-select * from {{ ref('orders') }}
+}} select * from {{ ref("orders") }}

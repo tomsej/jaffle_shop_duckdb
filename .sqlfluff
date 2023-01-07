@@ -1,3 +1,15 @@
 [sqlfluff]
+exclude_rules = L003, L018, L036
 
-dialect = ansi
+[sqlfluff:rules]
+max_line_length = 88  # or whatever you set in sqlfmt
+capitalisation_policy = lower
+extended_capitalisation_policy = lower
+
+[sqlfluff:indentation]
+indented_joins = False
+indented_using_on = True
+template_blocks_indent = False
+
+[sqlfluff:rules:L052]
+multiline_newline = True
